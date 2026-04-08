@@ -28,6 +28,28 @@ class Circle(Shape):
     def display_info(self):
         return f"{super().display_info()}, Radius: {self.radius}, Area: {self.area():.2f}"
     
+class Circle(Shape):
+    def __init__(self, radius):
+        super().__init__("Circle")
+        self.radius = radius
+
+    def area(self):
+        return math.pi * self.radius ** 2
+    
+    def display_info(self):
+        return f"{super().display_info()}, Radius: {self.radius}, Area: {self.area():.2f}"
+    
+    @classmethod
+    def create_circle(cls, radius):
+        try:
+            radius = float(radius)
+            if radius <= 0:
+                raise ValueError("Radius must be greater than 0.")
+            return cls(radius)
+        except ValueError as e:
+            print(f"Could not create circle: {e}")
+            return None
+    
 class Rectangle(Shape):
     def __init__(self, length, width):
         super().__init__("Rectangle")
@@ -56,19 +78,22 @@ class Rectangle(Shape):
             print(f"Could not create rectangle: {e}")
             return None
     
-    def run_demo(self):
-        try:
-            circle = create_circle(7)
-            rectangle = create_rectangle(10, 4)
+def run_demo():
+    try:
+        circle = Circle.create_circle(7)
+        rectangle = Rectangle.create_rectangle(10, 4)
 
-            if circle:
-                print(circle.display_info())
-            if rectangle:
-                print(rectangle.display_info())
+        if circle:
+            print(circle.display_info())
+        if rectangle:
+            print(rectangle.display_info())
 
-            print ('\n') 
-            print('==========Attempting to create shapes with invalid dimensions==========')
-            create_circle(-3)
-            create_rectangle("long", 5)
-        except Exception as error:
-            print(f"Unexpected error in shapes demo: {error}")
+        print ('\n') 
+        print('==========Attempting to create shapes with invalid dimensions==========')
+        Circle.create_circle(-3)
+        Rectangle.create_rectangle("long", 5)
+    except Exception as error:
+        print(f"Unexpected error in shapes demo: {error}")
+
+if __name__ == "__main__":
+    run_demo()
